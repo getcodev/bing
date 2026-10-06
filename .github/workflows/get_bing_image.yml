@@ -9,6 +9,9 @@ on:
 env:
   TZ: Asia/Shanghai
 
+permissions:
+  contents: write   # 关键：允许 Action 推送代码到 page 分支
+
 jobs:
   get_bing_image:
     runs-on: ubuntu-latest
@@ -58,11 +61,14 @@ jobs:
 
     - name: Commit and push to page branch
       run: |
+        # 彻底清空 static 目录，避免旧文件残留
+        rm -rf static/*
+        # 将最新 page 目录内容完整复制到 static
         cp -r ./page/. static/
         cd static
         git init
         git checkout -b page
-        git add .
+        git add -A
         git commit -m "⏱️GitHub Action每日定时更新"
         git push --force https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git page
 
