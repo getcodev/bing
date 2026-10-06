@@ -61,8 +61,6 @@ jobs:
 
     - name: Commit and push to page branch
       run: |
-        # 彻底清空 static 目录，避免旧文件残留
-        rm -rf static/*
         # 将最新 page 目录内容完整复制到 static
         cp -r ./page/. static/
         cd static
